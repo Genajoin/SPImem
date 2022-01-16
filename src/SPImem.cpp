@@ -32,7 +32,7 @@ void SPImem::WriteByte(uint32_t addr, byte DATA)
     M25_Chip_Select_DISABLE;
 }
 
-void SPImem::_NotBusy(void)
+void SPImem::NotBusy(void)
 {
     M25_Chip_Select_ENABLE;
     M25_InstructionSend(M25_RDSR);
