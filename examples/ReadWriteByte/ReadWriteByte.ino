@@ -1,6 +1,6 @@
 #include <SPImem.h>
 
-  //SPImem m;
+SPImem flash;
 
 
 void setup() {
