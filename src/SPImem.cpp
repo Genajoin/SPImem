@@ -8,8 +8,11 @@ void SPImem::ChipErase(void)
 
 void SPImem::SectorErase(uint32_t addr_in_sector)
 {
+    M25_Chip_Select_DISABLE;
+    M25_Chip_Select_ENABLE;
     _DataSendReceive(M25_SE);
     _AddressSend(addr_in_sector);
+    M25_Chip_Select_DISABLE;
 }
 
 uint8_t SPImem::ReadByte(uint32_t addr)
