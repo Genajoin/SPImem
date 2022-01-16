@@ -53,8 +53,8 @@ class SPImem
 {
 public:
     //------------------------------------ Constructor ------------------------------------//
-    SPImem(void){};
-    ~SPImem(void){};
+    //SPImem(void){};
+    //~SPImem(void){};
     //------------------------------- Public functions -----------------------------------//
     void ChipErase(void);
     void SectorErase(uint32_t addr_in_sector);
@@ -67,5 +67,7 @@ private:
     void _SendCommand(uint8_t com);
     void _AddressSend(uint32_t addr);
 };
+
+extern SPImem flash;
 
 #endif

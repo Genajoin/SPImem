@@ -1,0 +1,24 @@
+{
+  "name": "SPImem",
+  "version": "1.0.0",
+  "description": "Help to read/write bytes with FLASH memory chip like M25PXXX via SPI",
+  "keywords": "SPI, flash, memory",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/Genajoin/spimem.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Evgeny Istomin",
+      "email": "gena@regimov.net",
+      "url": "https://regimov.net"
+    }
+  ],
+  "license": "MIT",
+  "dependencies": {
+  },
+  "frameworks": "*",
+  "platforms": "*"
+}
