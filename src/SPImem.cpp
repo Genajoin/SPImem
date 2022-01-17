@@ -1,5 +1,17 @@
 #include "SPImem.h"
 
+SPImem::SPImem(uint8_t cs)
+{
+    _cs = cs;
+    pinMode(cs, OUTPUT);
+    M25_Chip_Select_DISABLE;
+}
+
+SPImem::SPImem()
+{
+    SPImem(SS);
+}
+
 void SPImem::ChipErase(void)
 {
     _SendCommand(M25_WREN);
@@ -8,7 +20,7 @@ void SPImem::ChipErase(void)
 
 void SPImem::SectorErase(uint32_t addr_in_sector)
 {
-    M25_Chip_Select_DISABLE;
+    _SendCommand(M25_WREN);
     M25_Chip_Select_ENABLE;
     _DataSendReceive(M25_SE);
     _AddressSend(addr_in_sector);

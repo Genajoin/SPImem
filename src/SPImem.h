@@ -34,9 +34,8 @@
 
 #define Dummy 0x00
 
-#define M25_NSS SS
-#define M25_Chip_Select_ENABLE digitalWrite(M25_NSS, LOW)
-#define M25_Chip_Select_DISABLE digitalWrite(M25_NSS, HIGH)
+#define M25_Chip_Select_ENABLE digitalWrite(_cs, LOW)
+#define M25_Chip_Select_DISABLE digitalWrite(_cs, HIGH)
 #define M25_InstructionSend(Instruction) _DataSendReceive(Instruction)
 #define M25_DataSend(Data) _DataSendReceive(Data)
 #define M25_DataReceive() _DataSendReceive(Dummy)
@@ -45,22 +44,33 @@ class SPImem
 {
 public:
     //------------------------------------ Constructor ------------------------------------//
+
+    /// init flash with CS on SS pin
+    SPImem();
+
+    /// init flash on cs pin
+    SPImem(uint8_t cs);
     //------------------------------- Public functions -----------------------------------//
 
-    // Erase all data on flash memory
+    /// Erase all data on flash memory
     void ChipErase(void);
-    // Erase data in Sector area (512 bytes)
-    // addr_in_sector - any memory address inside sector area
+
+    /// Erase data in Sector area (512 bytes)
+    /// addr_in_sector - any memory address inside sector area
     void SectorErase(uint32_t addr_in_sector);
+
     uint8_t ReadByte(uint32_t addr);
+
     void WriteByte(uint32_t addr, byte DATA);
-    // wait to finish all process like erase/write...
+
+    /// wait to finish all process like erase/write...
     void NotBusy(void);
     //------------------------------- Public variables -----------------------------------//
 private:
     uint8_t _DataSendReceive(uint8_t DATA);
     void _SendCommand(uint8_t com);
     void _AddressSend(uint32_t addr);
+    uint8_t _cs;
 };
 
 #endif
