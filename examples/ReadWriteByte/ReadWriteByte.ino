@@ -1,15 +1,28 @@
-#include <SPImem.h>
+#include "SPImem.h"
+#define WRITE_ADDRESS 0x01
+#define CS_PIN  GPIO1
 
-SPImem flash;
+SPImem flash(CS_PIN);
 
+void printByte(uint32_t addr) {
+  Serial.print(addr, HEX);
+  Serial.print(":");
+  Serial.println(flash.ReadByte(addr), HEX);
+}
 
 void setup() {
-  pinMode(Vext,OUTPUT);
-  digitalWrite(Vext,LOW);
-  SPI.begin();
-  flash.SectorErase(0x01);
-  flash.WriteByte(0x01, 0xAA);
-  byte b = flash.ReadByte(0x01);  
+  Serial.begin(115200);
+  while (!Serial) {
+    ;
+  };
+  SPI.begin(CS_PIN);
+  printByte(WRITE_ADDRESS);
+  flash.SectorErase(WRITE_ADDRESS);
+  flash.NotBusy();
+  printByte(WRITE_ADDRESS);
+  flash.WriteByte(WRITE_ADDRESS, 0xAA);
+  flash.NotBusy();
+  printByte(WRITE_ADDRESS);
 }
 
 void loop() {}
