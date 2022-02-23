@@ -25,27 +25,30 @@ void setup()
     ;
   };
   SPI.begin(CS_PIN);
+  unsigned int addr = WRITE_ADDRESS;
+
   Serial.println("Read");
   flash.NotBusy();
-  flash.ReadBytes(addr, &data, DATA_LEN);
-  flash.printBytes(addr, &data, DATA_LEN);
+  flash.ReadBytes(addr, data, DATA_LEN);
+  printBytes(addr, data, DATA_LEN);
   Serial.println("Erase");
   flash.SectorErase(WRITE_ADDRESS);
   Serial.println("Read");
   flash.NotBusy();
-  flash.ReadBytes(addr, &data, DATA_LEN);
-  flash.printBytes(addr, &data, DATA_LEN);
+  flash.ReadBytes(addr, data, DATA_LEN);
+  printBytes(addr, data, DATA_LEN);
   Serial.println("Write");
   flash.NotBusy();
   for (size_t i = 0; i < DATA_LEN; i++)
   {
     data[i] = i;
   }
-  flash.WriteBytes(addr, &data, DATA_LEN);
+  printBytes(addr, data, DATA_LEN);
+  flash.WriteBytes(addr, data, DATA_LEN);
   Serial.println("Read");
   flash.NotBusy();
-  flash.ReadBytes(addr, &data, DATA_LEN);
-  flash.printBytes(addr, &data, DATA_LEN);
+  flash.ReadBytes(addr, data, DATA_LEN);
+  printBytes(addr, data, DATA_LEN);
 }
 
 void loop() {}
