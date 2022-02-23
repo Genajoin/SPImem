@@ -37,6 +37,18 @@ uint8_t SPImem::ReadByte(uint32_t addr)
     return result;
 }
 
+void SPImem::ReadBytes(uint32_t addr, byte *buf, int len)
+{
+    M25_Chip_Select_ENABLE;
+    M25_InstructionSend(M25_READ);
+    _AddressSend(addr);
+    for (int i = 0; i < len; i++)
+    {
+        buf[i] = M25_DataReceive();
+    }
+    M25_Chip_Select_DISABLE;
+}
+
 void SPImem::WriteByte(uint32_t addr, byte DATA)
 {
     _SendCommand(M25_WREN);
@@ -44,6 +56,18 @@ void SPImem::WriteByte(uint32_t addr, byte DATA)
     M25_InstructionSend(M25_PP);
     _AddressSend(addr);
     M25_DataSend(DATA);
+    M25_Chip_Select_DISABLE;
+}
+
+void SPImem::WriteBytes(uint32_t addr, byte *buf, int len)
+{
+    M25_Chip_Select_ENABLE;
+    M25_InstructionSend(M25_PP);
+    _AddressSend(addr);
+    for (int i = 0; i < len; i++)
+    {
+        M25_DataSend(buf[i]);
+    }
     M25_Chip_Select_DISABLE;
 }
 
