@@ -1,21 +1,24 @@
 #include "SPImem.h"
 #define WRITE_ADDRESS 0x01
-#define CS_PIN  GPIO1
+#define CS_PIN GPIO1
 
-SPImem flash(CS_PIN);
+SPImem flash(CS_PIN, &SPI);
 
-void printByte(uint32_t addr) {
+void printByte(uint32_t addr)
+{
   Serial.print(addr, HEX);
   Serial.print(":");
   Serial.println(flash.ReadByte(addr), HEX);
 }
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
-  while (!Serial) {
+  while (!Serial)
+  {
     ;
   };
-  SPI.begin(CS_PIN);
+  flash.begin();
   printByte(WRITE_ADDRESS);
   flash.SectorErase(WRITE_ADDRESS);
   flash.NotBusy();

@@ -49,8 +49,10 @@ public:
     SPImem();
 
     /// init flash on cs pin
-    SPImem(uint8_t cs);
+    SPImem(uint8_t cs, SPIClass *spi);
     //------------------------------- Public functions -----------------------------------//
+
+    void begin();
 
     /// Erase all data on flash memory
     void ChipErase(void);
@@ -58,7 +60,7 @@ public:
     /// Erase data in Sector area (512 bytes)
     /// addr_in_sector - any memory address inside sector area
     void SectorErase(uint32_t addr_in_sector);
-
+    uint8_t ReadSR();
     uint8_t ReadByte(uint32_t addr);
     void ReadBytes(uint32_t addr, byte *buf, int len);
 
@@ -73,6 +75,7 @@ private:
     void _SendCommand(uint8_t com);
     void _AddressSend(uint32_t addr);
     uint8_t _cs;
+    SPIClass *_spi;
 };
 
 #endif

@@ -1,15 +1,21 @@
 #include "SPImem.h"
 
-SPImem::SPImem(uint8_t cs)
+SPImem::SPImem(uint8_t cs, SPIClass *spi)
 {
     _cs = cs;
-    pinMode(cs, OUTPUT);
-    M25_Chip_Select_DISABLE;
+    _spi = spi;
 }
 
 SPImem::SPImem()
 {
-    SPImem(SS);
+    SPImem(SS, &SPI);
+}
+
+void SPImem::begin()
+{
+    // pinMode(_cs, OUTPUT);
+    // M25_Chip_Select_DISABLE;
+    _spi->begin(_cs);
 }
 
 void SPImem::ChipErase(void)
@@ -25,6 +31,15 @@ void SPImem::SectorErase(uint32_t addr_in_sector)
     _DataSendReceive(M25_SE);
     _AddressSend(addr_in_sector);
     M25_Chip_Select_DISABLE;
+}
+
+uint8_t SPImem::ReadSR()
+{
+    M25_Chip_Select_ENABLE;
+    M25_InstructionSend(M25_READ);
+    uint8_t result = M25_DataReceive();
+    M25_Chip_Select_DISABLE;
+    return result;
 }
 
 uint8_t SPImem::ReadByte(uint32_t addr)
@@ -59,6 +74,7 @@ void SPImem::WriteByte(uint32_t addr, byte DATA)
     M25_Chip_Select_DISABLE;
 }
 
+//* write up to 256 bytes
 void SPImem::WriteBytes(uint32_t addr, byte *buf, int len)
 {
     M25_Chip_Select_ENABLE;
@@ -81,7 +97,7 @@ void SPImem::NotBusy(void)
     M25_Chip_Select_DISABLE;
 }
 
-void SPImem::_AddressSend(uint32_t addr)
+inline void SPImem::_AddressSend(uint32_t addr)
 {
     M25_DataSend((addr & 0x00FF0000) >> 16);
     M25_DataSend((addr & 0x0000FF00) >> 8);
@@ -95,7 +111,7 @@ inline void SPImem::_SendCommand(uint8_t com)
     M25_Chip_Select_DISABLE;
 }
 
-uint8_t SPImem::_DataSendReceive(uint8_t DATA)
+inline uint8_t SPImem::_DataSendReceive(uint8_t DATA)
 {
-    return SPI.transfer(DATA);
+    return _spi->transfer(DATA);
 }
