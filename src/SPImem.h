@@ -66,7 +66,8 @@ public:
     void WriteBytes(uint32_t addr, byte *buf, int len);
 
     /// wait to finish all process like erase/write...
-    void NotBusy(void);
+    void NotBusyWait(void);
+    bool isBusy(void);
     //------------------------------- Public variables -----------------------------------//
 private:
     uint8_t _DataSendReceive(uint8_t DATA);

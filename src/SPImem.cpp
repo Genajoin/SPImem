@@ -80,7 +80,16 @@ void SPImem::WriteBytes(uint32_t addr, byte *buf, int len)
     M25_Chip_Select_DISABLE;
 }
 
-void SPImem::NotBusy(void)
+bool SPImem::isBusy(void)
+{
+    M25_Chip_Select_ENABLE;
+    M25_InstructionSend(M25_RDSR);
+    bool result =  M25_DataReceive() & M25_WIP;
+    M25_Chip_Select_DISABLE;
+    return result;
+}
+
+void SPImem::NotBusyWait(void)
 {
     M25_Chip_Select_ENABLE;
     M25_InstructionSend(M25_RDSR);
