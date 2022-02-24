@@ -52,8 +52,6 @@ public:
     SPImem(uint8_t cs, SPIClass *spi);
     //------------------------------- Public functions -----------------------------------//
 
-    void begin();
-
     /// Erase all data on flash memory
     void ChipErase(void);
 

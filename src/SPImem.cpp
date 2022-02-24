@@ -11,13 +11,6 @@ SPImem::SPImem()
     SPImem(SS, &SPI);
 }
 
-void SPImem::begin()
-{
-    // pinMode(_cs, OUTPUT);
-    // M25_Chip_Select_DISABLE;
-    _spi->begin(_cs);
-}
-
 void SPImem::ChipErase(void)
 {
     _SendCommand(M25_WREN);
