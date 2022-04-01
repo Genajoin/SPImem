@@ -60,10 +60,10 @@ public:
     void SectorErase(uint32_t addr_in_sector);
     uint8_t ReadSR();
     uint8_t ReadByte(uint32_t addr);
-    void ReadBytes(uint32_t addr, byte *buf, int len);
+    void ReadBytes(uint32_t addr, void *buf, int len);
 
     void WriteByte(uint32_t addr, byte DATA);
-    void WriteBytes(uint32_t addr, byte *buf, int len);
+    void WriteBytes(uint32_t addr, void *buf, int len);
 
     /// wait to finish all process like erase/write...
     void NotBusyWait(void);

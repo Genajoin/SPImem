@@ -45,14 +45,15 @@ uint8_t SPImem::ReadByte(uint32_t addr)
     return result;
 }
 
-void SPImem::ReadBytes(uint32_t addr, byte *buf, int len)
+void SPImem::ReadBytes(uint32_t addr, void *buf, int len)
 {
+    uint8_t *data = (uint8_t *)buf;
     M25_Chip_Select_ENABLE;
     M25_InstructionSend(M25_READ);
     _AddressSend(addr);
     for (int i = 0; i < len; i++)
     {
-        buf[i] = M25_DataReceive();
+        data[i] = M25_DataReceive();
     }
     M25_Chip_Select_DISABLE;
 }
@@ -68,14 +69,16 @@ void SPImem::WriteByte(uint32_t addr, byte DATA)
 }
 
 //* write up to 256 bytes
-void SPImem::WriteBytes(uint32_t addr, byte *buf, int len)
+void SPImem::WriteBytes(uint32_t addr, void *buf, int len)
 {
+    uint8_t *data = (uint8_t *)buf;
+    _SendCommand(M25_WREN);
     M25_Chip_Select_ENABLE;
     M25_InstructionSend(M25_PP);
     _AddressSend(addr);
     for (int i = 0; i < len; i++)
     {
-        M25_DataSend(buf[i]);
+        M25_DataSend(data[i]);
     }
     M25_Chip_Select_DISABLE;
 }
@@ -84,7 +87,7 @@ bool SPImem::isBusy(void)
 {
     M25_Chip_Select_ENABLE;
     M25_InstructionSend(M25_RDSR);
-    bool result =  M25_DataReceive() & M25_WIP;
+    bool result = M25_DataReceive() & M25_WIP;
     M25_Chip_Select_DISABLE;
     return result;
 }
